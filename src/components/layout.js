@@ -5,12 +5,60 @@
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
 
-import * as React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
+import * as React from "react";
+import PropTypes from "prop-types";
+import { useStaticQuery, graphql } from "gatsby";
+import styled from "styled-components";
+import { SkipNavLink, SkipNavContent } from "@reach/skip-nav";
 
-import Header from "./header"
-import "./layout.css"
+import Header from "./header";
+import Navigation from "./navigation";
+import Footer from "./footer";
+import FontStyles from "./font-styles";
+
+import "./layout.css";
+import "@reach/skip-nav/styles.css";
+
+const Page = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  height: 100vh;
+`;
+
+const FlexContainer = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  /* margin: 0 auto; */
+  max-width: 1320px;
+
+  @media (max-width: 1319.98px) {
+    max-width: 100%;
+  }
+`;
+
+const StyledSkipNavLink = styled(SkipNavLink)`
+  &:focus {
+    z-index: 2; // Needs to sit on top of sticky header
+  }
+`;
+
+const StyledSkipNavContent = styled(SkipNavContent)`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: hidden;
+  scroll-margin-top: 20em;
+
+  main {
+    flex-grow: 1;
+    margin: 30px;
+  }
+`;
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -21,35 +69,24 @@ const Layout = ({ children }) => {
         }
       }
     }
-  `)
+  `);
 
   return (
-    <>
+    <Page>
+      <FontStyles />
+      <StyledSkipNavLink>Skip to main content</StyledSkipNavLink>
       <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
-        <main>{children}</main>
-        <footer
-          style={{
-            marginTop: `2rem`,
-          }}
-        >
-          © {new Date().getFullYear()}, Built with
-          {` `}
-          <a href="https://www.gatsbyjs.com">Gatsby</a>
-        </footer>
-      </div>
-    </>
-  )
-}
+      <FlexContainer>
+        <Navigation />
+        <StyledSkipNavContent>{children}</StyledSkipNavContent>
+      </FlexContainer>
+      <Footer />
+    </Page>
+  );
+};
 
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
-}
+};
 
-export default Layout
+export default Layout;
