@@ -1,17 +1,14 @@
-FROM node:16
+FROM node:16 as builder
 
-WORKDIR /opt/app
+WORKDIR /app
 
+# COPY the package.json file, install dependencies, run build script
+COPY package.json .
+RUN npm install
 COPY . .
+RUN ["npm", "run", "build"]
 
-# Install the Gatsby CLI to enable building and serving
-RUN npm install -g gatsby-cli
 
-## Install dependencies from package.json
-RUN npm install --verbose
-
-RUN gatsby build --verbose
-
-EXPOSE 5000
-
-# RUN gatsby serve --port 8000
+FROM nginx
+EXPOSE 80
+COPY --from=builder /app/public /usr/share/nginx/html

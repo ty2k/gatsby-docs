@@ -33,6 +33,7 @@
     "typography": "^0.16.21"
   },
   "devDependencies": {
+    "gatsby-cli": "^4.12.0",
     "prettier": "^2.5.1"
   },
   "keywords": [
@@ -41,7 +42,7 @@
   "license": "0BSD",
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
+    "develop": "gatsby develop --host 0.0.0.0 --port 8000",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "gatsby develop",
     "serve": "gatsby serve",
